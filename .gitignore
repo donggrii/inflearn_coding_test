@@ -1,0 +1,8 @@
+# folder
+강의자료/
+기타/
+
+# custom
+.idea/
+.git/
+*.txt
