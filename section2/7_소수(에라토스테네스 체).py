@@ -8,6 +8,7 @@ n = int(input())
 prime = [1] * (n + 1)
 
 for i in range(2, int(n**0.5) + 1):
+    # if prime[i] == 1:
     k = 2
     while i * k <= n:
         prime[i * k] = 0
