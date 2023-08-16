@@ -4,7 +4,7 @@ import sys
 sys.stdin = open("input.txt", "r")
 n = int(input())  # 총 회의 수
 meetings = [list(map(int, input().split())) for _ in range(n)]  # (start, end)
-meetings = sorted(meetings, key=lambda x: x[1])
+meetings = sorted(meetings, key=lambda x: x[1])  # 회의 종료 시간 기준으로 정렬
 
 cnt = 1
 end_time = meetings[0][1]
