@@ -1,4 +1,5 @@
 # 내 풀이 (성공)
+# 정리 : https://ddonggrii.tistory.com/4
 import sys
 
 sys.stdin = open("input.txt", "r")

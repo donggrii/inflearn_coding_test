@@ -1,4 +1,5 @@
 # 내 풀이 (정답)
+# 정리 : https://ddonggrii.tistory.com/5
 import sys
 from collections import deque
 
