@@ -1,7 +1,22 @@
-# import sys
-# sys.stdin = open("input.txt", "r")
+# 내 풀이 (정답)
+import sys
 
-# 내 풀이 (성공!)
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(n):
+    if n > 0:
+        quotient, remainder = divmod(n, 2)
+        DFS(quotient)
+        print(remainder, end="")
+
+
+if __name__ == "__main__":
+    n = int(input())
+    DFS(n)
+
+
+# (과거) 내 풀이
 from typing import List
 
 
@@ -11,7 +26,7 @@ def dfs(x: int, lst: List[str]):
         x //= 2  # 0
         dfs(x, lst)
     else:
-        print(int(''.join(reversed(lst))))
+        print(int("".join(reversed(lst))))
 
 
 if __name__ == "__main__":
@@ -20,15 +35,28 @@ if __name__ == "__main__":
     dfs(n, answer)  # 1011
 
 
-# 답안 예시
+# 정답 해설
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
 def DFS(x):
     if x == 0:
-        return  # 값을 호출한 곳에 값을 반환해주는 의미도 있지만, 함수 종료 명령어도 됨
+        return
     else:
         DFS(x // 2)
         print(x % 2, end="")
 
 
 if __name__ == "__main__":
-    n = int(input())  # 11
-    DFS(n)  # 1011
+    n = int(input())
+    DFS(n)
+
+
+# Test Case.
+# < input >
+# 11
+
+# < output >
+# 1011
