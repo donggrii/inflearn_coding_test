@@ -1,58 +1,99 @@
-# 내 풀이 (성공!)
-# 1 <= N <= 10 이므로 최대 경우의 수는 2^10 = 1024가지
-# N개의 원소를 각각 포함 or 포함하지 않을 때를 상태 트리로 나눠 2개의 서로소 집합을 만들고 합을 비교하는 DFS로 풀이
-def dfs(v):
+# 내 풀이 (정답)
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(v):
     if v == n:
-        left = [total[i] for i in range(v) if check[i] == 1]
-        right = [total[i] for i in range(v) if check[i] == 0]
-        if sum(left) == sum(right):
-            return "YES"
+        sum_ = 0
+        for i in range(n):
+            if check[i] == 1:
+                sum_ += lst[i]
+        if sum_ * 2 == total:
+            result = "YES"
+            print(result)
+            sys.exit(0)
     else:
         check[v] = 1
-        if dfs(v + 1) == "YES":
-            return "YES"
+        DFS(v + 1)
         check[v] = 0
-        if dfs(v + 1) == "YES":
-            return "YES"
+        DFS(v + 1)
 
 
 if __name__ == "__main__":
     n = int(input())
-    total = list(map(int, input().split()))
+    lst = list(map(int, input().split()))
     check = [0] * n
-    if dfs(0) == "YES":
-        print("YES")
-    else:
-        print("NO")
+
+    total = sum(lst)
+    result = "NO"
+    DFS(0)
+    print(result)
 
 
-# 답안 예시
-# 총 (2^N - 1)가지의 경우(공집합 제외)를 다 만들면서 내가 만든 부분 집합의 합을 sum_ 변수로 누적시킴
-# 내가 만든 부분 집합에 포함되지 않는 원소들의 합은 전체 집합의 합에서 sum_ 변수를 뺀 값이 될 것
-# 따라서, 전체 집합의 합을 total 변수에 담고, 내가 만든 부분 집합의 합(sum_)이 (total - sum_)과 같으면 됨!
-# => 여기서 sum_ == (total // 2) 로 하면 안 되는 이유 : total이 홀수일 경우 "NO"가 나와야 하는데 "YES"가 나올 수도 있음
+# 정답 해설 1
+# 부분 집합의 합을 sum_ 변수에 누적하는 상태 트리 구성
 import sys
 
+sys.stdin = open("input.txt", "r")
 
-def DFS(L, sum_):
-    """
-    L (Level) : a의 index
-    sum_ : 내가 만든 부분 집합의 원소 값들을 누적합 시킨 변수
-    """
-    if sum_ > total // 2:  # 시간 복잡도 개선
+
+def DFS(level, sum_):
+    if sum_ > total / 2:  # Cut Edge, 가지치기 (시간 복잡도 개선)
         return
-    if L == n:  # L이 (마지막 index + 1)인 n에 도달했을 때 종료
+    if level == n:
         if sum_ == (total - sum_):
             print("YES")
-            sys.exit(0)  # 프로그램을 아예 종료시킴
+            sys.exit(0)  # 프로그램 전체 종료 (0: 정상 종료, 1: 비정상 종료)
     else:
-        DFS(L + 1, sum_ + a[L])  # 왼쪽 노드 (a의 L번째 index에 있는 값 사용 O)
-        DFS(L + 1, sum_)  # 오른쪽 노드 (a의 L번째 index에 있는 값 사용 X)
+        DFS(level + 1, sum_ + a[level])  # 부분집합으로 사용 O
+        DFS(level + 1, sum_)  # 부분집합으로 사용 X
 
 
 if __name__ == "__main__":
-    n = int(input())  # 6
-    a = list(map(int, input().split()))  # 1 3 5 6 7 10
+    n = int(input())
+    a = list(map(int, input().split()))
     total = sum(a)
     DFS(0, 0)
-    print("NO")
+    print("NO")  # 프로그램 종료되지 않았다면 "NO" 출력
+
+
+# 정답 해설 2 : sys.exit(0) 사용하지 않고 종료하는 방법
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(level, sum_):
+    global answer, flag
+    if flag:  # 신호 변수를 두고, 답을 구하면 그 다음 호출들은 바로 종료
+        return
+    if sum_ > total / 2:
+        return
+    if level == n:
+        if sum_ == (total - sum_):
+            answer = "YES"
+            flag = True
+    else:
+        DFS(level + 1, sum_ + a[level])
+        DFS(level + 1, sum_)
+
+
+if __name__ == "__main__":
+    n = int(input())
+    a = list(map(int, input().split()))
+    total = sum(a)
+    answer = "NO"
+    flag = False
+    DFS(0, 0)
+    print(answer)
+
+
+# Test Case.
+# < input >
+# 6
+# 1 3 5 6 7 10
+
+# < output >
+# YES
