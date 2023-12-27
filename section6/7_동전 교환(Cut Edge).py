@@ -1,89 +1,106 @@
-# # 내 풀이 1 (3번 TC 실패)
-# def dfs(L):
-#     global m, cnt
-#     if m == 0:
-#         return
-#     else:
-#         L_cnt = m // coins[L]
-#         cnt += L_cnt
-#         m -= coins[L] * L_cnt
-#         dfs(L + 1)
-#
-#
-# if __name__ == "__main__":
-#     n = int(input())  # 5
-#     coins = sorted(map(int, input().split()), reverse=True)  # [1, 8, 20, 25, 50]
-#     m = int(input())  # 129
-#     cnt = 0
-#     dfs(0)
-#     print(cnt)  # 답 : 5, 출력 : 7
+# 내 풀이 1 (80% 정답, 3번 Test Case 오답)
+# 회고 : 액수가 큰 동전을 많이 사용한다고 '무조건' 최소 개수의 동전을 사용하는 게 아님
+# (ex) 아래의 Test Case 2의 경우, 7개(50, 50, 25, 1, 1, 1, 1) vs. 5개(50, 50, 20, 8, 1)
+import sys
+
+sys.stdin = open("input.txt", "r")
 
 
-# 내 풀이 2 (실패)
-# def dfs(L, L_cnt, sum_):
-#     global cnt
-#     if sum_ > m or L >= n:
-#         return
-#     elif sum_ == m:
-#         if cnt > L_cnt:
-#             cnt = L_cnt
-#     else:
-#         for i in range(((m - sum_) // coins[L]) + 1):
-#             dfs(L + 1, L_cnt + i, sum_ + i * coins[L])
-#
-#
-# if __name__ == "__main__":
-#     n = int(input())  # 5
-#     coins = sorted(map(int, input().split()), reverse=True)  # [1, 8, 20, 25, 50]
-#     m = int(input())  # 129
-#     cnt = int(1e9)
-#     dfs(0, 0, 0)
-#     print(cnt)
-
-
-# 내 풀이 3 (설명만 듣고 다시 시도 -> 내림차순 정렬만 다시 적용해주니 성공!)
-def dfs(L, sum_):
-    global res
-    if sum_ > m or L > res:
+def DFS(level, sum_):
+    global flag
+    if flag:
         return
-    if sum_ == m:
-        if L < res:
-            res = L
+    if sum_ > m:
+        return
+    elif sum_ == m:
+        flag = True
+        print(level)
+        # sys.exit(0)
     else:
         for i in range(n):
-            dfs(L + 1, sum_ + coins[i])
+            DFS(level + 1, sum_ + coins[i])
 
 
 if __name__ == "__main__":
     n = int(input())
-    coins = sorted(list(map(int, input().split())), reverse=True)
+    coins = sorted(map(int, input().split()), reverse=True)
     m = int(input())
-    res = int(1e9)
-    dfs(0, 0)
-    print(res)
+    flag = False
+    DFS(0, 0)
 
 
-# 답안 예시
-# 작은 값부터 넣으면 처음 출발이 너무 깊게 들어가므로 내림차순으로 가장 큰 동전부터 적용해야 함!!
-def DFS(L, sum_):
-    global res
-    if L > res:
+# 내 풀이 2 (정답)
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(level, sum_):
+    global result
+    if level > result:  # Cut Edge : 현재까지 구한 최소 동전 개수보다 많다면 볼 필요 없음
+        return
+    if sum_ > m:
+        return
+    elif sum_ == m:
+        result = min(result, level)
+    else:
+        for i in range(n):
+            DFS(level + 1, sum_ + coins[i])
+
+
+if __name__ == "__main__":
+    n = int(input())
+    coins = sorted(map(int, input().split()), reverse=True)
+    m = int(input())
+    result = 2147000000
+    DFS(0, 0)
+    print(result)
+
+
+# 정답 해설
+# Tip : 작은 값부터 넣으면 처음 출발이 너무 깊게 들어가므로 내림차순으로 가장 큰 동전부터 적용하기
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(level, sum_):
+    global result
+    if level > result:
         return
     if sum_ > m:
         return
     if sum_ == m:
-        if L < res:
-            res = L
+        if level < result:
+            result = level
     else:
         for i in range(n):
-            DFS(L + 1, sum_ + a[i])
+            DFS(level + 1, sum_ + coins[i])
 
 
 if __name__ == "__main__":
     n = int(input())
-    a = list(map(int, input().split()))
+    coins = sorted(map(int, input().split()), reverse=True)
     m = int(input())
-    res = 2147000000  # 매우 큰 값이면 됨
-    a.sort(reverse=True)
+    result = 2147000000
     DFS(0, 0)
-    print(res)
+    print(result)
+
+
+# Test Case 1.
+# < input >
+# 3
+# 1 2 5
+# 15
+
+# < output >
+# 3
+
+# Test Case 2.
+# < input >
+# 5
+# 1 8 20 25 50
+# 129
+
+# < output >
+# 5
