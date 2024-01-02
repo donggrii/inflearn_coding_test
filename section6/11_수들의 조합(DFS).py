@@ -1,54 +1,76 @@
-# 내 풀이 (성공!)
-def dfs(L, s):
+# 내 풀이 (정답)
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(level, start_idx):
     global cnt
-    if L == k:
-        if sum(res) % m == 0:
+    if level == k:
+        if sum(result) % m == 0:
             cnt += 1
     else:
-        for i in range(s, n):
-            res[L] = nums[i]
-            dfs(L + 1, i + 1)
+        for i in range(start_idx, n):
+            result[level] = nums[i]
+            DFS(level + 1, i + 1)
 
 
 if __name__ == "__main__":
     n, k = map(int, input().split())
     nums = list(map(int, input().split()))
     m = int(input())
-    res = [0] * k
+    result = [0] * k
     cnt = 0
-    dfs(0, 0)
+    DFS(0, 0)
     print(cnt)
 
 
-# 답안 예시 1 (DFS)
-def DFS(L, s, sum_):
+# 정답 해설 1 (DFS)
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(level, start_idx, sum_):
     global cnt
-    if L == k:
+    if level == k:
         if sum_ % m == 0:
             cnt += 1
     else:
-        for i in range(s, n):
-            DFS(L + 1, i + 1, sum_ + a[i])
+        for i in range(start_idx, n):
+            DFS(level + 1, i + 1, sum_ + nums[i])
 
 
 if __name__ == "__main__":
     n, k = map(int, input().split())
-    a = list(map(int, input().split()))
+    nums = list(map(int, input().split()))
     m = int(input())
     cnt = 0
     DFS(0, 0, 0)
     print(cnt)
 
 
-# 답안 예시 2 (라이브러리를 이용한 조합)
+# 정답 해설 2 (itertools 라이브러리를 이용한 조합)
+import sys
 import itertools as it
 
+sys.stdin = open("input.txt", "r")
 
 n, k = map(int, input().split())
-a = list(map(int, input().split()))
+nums = list(map(int, input().split()))
 m = int(input())
 cnt = 0
-for x in it.combinations(a, k):
+for x in it.combinations(nums, k):
     if sum(x) % m == 0:
         cnt += 1
 print(cnt)
+
+
+# Test Case.
+# < input >
+# 5 3
+# 2 4 5 8 12
+# 6
+
+# < output >
+# 2
