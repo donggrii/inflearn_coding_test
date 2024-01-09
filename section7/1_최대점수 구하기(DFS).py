@@ -74,6 +74,32 @@ if __name__ == "__main__":
     print(result)
 
 
+# 다른 풀이 (조합 푸는 방식)
+import sys
+
+sys.stdin = open("input.txt", "r")
+
+
+def DFS(start, total, time):
+    global grade
+    if time > m:
+        return
+    if total > grade:
+        grade = total
+    for i in range(start, n):
+        DFS(i + 1, total + ques[i][0], time + ques[i][1])
+
+
+n, m = map(int, input().split())
+ques = []
+for _ in range(n):
+    a, b = map(int, input().split())
+    ques.append((a, b))
+grade = 0
+DFS(0, 0, 0)
+print(grade)
+
+
 # Test Case.
 # < input >
 # 5 20
