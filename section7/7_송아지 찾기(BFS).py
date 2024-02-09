@@ -52,6 +52,7 @@ while queue:
 
 
 # 정답 해설
+# 거리 배열 사용
 import sys
 from collections import deque
 
